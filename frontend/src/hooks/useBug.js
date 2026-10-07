@@ -9,6 +9,18 @@ export function useBug(id) {
 
   const reload = useCallback(() => setAttempt((a) => a + 1), [])
 
+  // Silent background refetch: used to mint a fresh pre-signed imageUrl when
+  // the previous one expires, WITHOUT toggling `loading` (which would unmount
+  // an open form and discard the user's in-progress edits).
+  const refresh = useCallback(async () => {
+    try {
+      const b = await api.get(`/bugs/${id}`)
+      setBug(b)
+    } catch {
+      /* keep showing the current bug; the next expiry retries */
+    }
+  }, [id])
+
   useEffect(() => {
     let alive = true
     setLoading(true)
@@ -23,5 +35,5 @@ export function useBug(id) {
     }
   }, [id, attempt])
 
-  return { bug, loading, error, reload }
+  return { bug, loading, error, reload, refresh }
 }

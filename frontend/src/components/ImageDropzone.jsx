@@ -2,7 +2,7 @@ import { useRef, useState } from 'react'
 import { ImagePlus, Trash2, UploadCloud } from 'lucide-react'
 import { cx } from '../lib/format.js'
 
-export function ImageDropzone({ previewUrl, alt = 'Selected screenshot', busy = false, onPick, onClear }) {
+export function ImageDropzone({ previewUrl, alt = 'Selected screenshot', busy = false, onPick, onClear, onExpire }) {
   const inputRef = useRef(null)
   const [dragOver, setDragOver] = useState(false)
 
@@ -17,7 +17,7 @@ export function ImageDropzone({ previewUrl, alt = 'Selected screenshot', busy = 
     <div>
       {previewUrl ? (
         <div className="relative overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700">
-          <img src={previewUrl} alt={alt} className="block max-h-64 w-full object-cover" />
+          <img src={previewUrl} alt={alt} className="block max-h-64 w-full object-cover" onError={() => onExpire?.()} />
           <div className="absolute right-2 bottom-2 flex gap-2">
             <button type="button" onClick={choose} disabled={busy} className="btn-secondary border-white/70 bg-white/90 backdrop-blur dark:border-slate-300/30 dark:bg-slate-800/80">
               <UploadCloud className="h-4 w-4" aria-hidden="true" />

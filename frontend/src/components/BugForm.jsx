@@ -14,7 +14,7 @@ const EMPTY = {
   status: 'open',
 }
 
-export function BugForm({ initial = EMPTY, existingImage = null, submitLabel, submitHint, onSubmit }) {
+export function BugForm({ initial = EMPTY, existingImage = null, submitLabel, submitHint, onSubmit, onImageExpired }) {
   const [title, setTitle] = useState(initial.title ?? '')
   const [description, setDescription] = useState(initial.description ?? '')
   const [severity, setSeverity] = useState(initial.severity ?? 'low')
@@ -27,6 +27,23 @@ export function BugForm({ initial = EMPTY, existingImage = null, submitLabel, su
   const [previewUrl, setPreviewUrl] = useState(existingImage ? existingImage.imageUrl : null)
   const [imageKind, setImageKind] = useState(existingImage ? 'keep' : 'none') // keep | none | add | remove
   const uploadProgressRef = useRef(0)
+  const lastImageRefreshRef = useRef(0)
+
+  // Pre-signed S3 view URLs expire after 5 minutes while the form stays open.
+  // When the caller re-fetches the bug (fresh imageUrl), swap the preview to
+  // the new URL. Only while keeping the existing image, so a pending local
+  // file preview (blob: URL) is never clobbered.
+  useEffect(() => {
+    if (imageKind === 'keep' && existingImage?.imageUrl) setPreviewUrl(existingImage.imageUrl)
+  }, [existingImage?.imageUrl]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const handleImageExpired = () => {
+    if (!onImageExpired) return
+    const now = Date.now()
+    if (now - lastImageRefreshRef.current < 5000) return
+    lastImageRefreshRef.current = now
+    onImageExpired()
+  }
 
   const uploading = useMemo(
     () => imageKind === 'uploading',
@@ -217,7 +234,7 @@ export function BugForm({ initial = EMPTY, existingImage = null, submitLabel, su
                 </div>
               </div>
             )}
-            <ImageDropzone previewUrl={previewUrl} busy={saving.current} onPick={pickFile} onClear={clearImage} />
+            <ImageDropzone previewUrl={previewUrl} busy={saving.current} onPick={pickFile} onClear={clearImage} onExpire={handleImageExpired} />
           </div>
         </div>
 

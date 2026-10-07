@@ -9,7 +9,7 @@ import { api } from '../api/client.js'
 
 export default function BugEdit() {
   const { id } = useParams()
-  const { bug, loading, error, reload } = useBug(id)
+  const { bug, loading, error, reload, refresh } = useBug(id)
   const { toast } = useToast()
   const navigate = useNavigate()
 
@@ -56,6 +56,7 @@ export default function BugEdit() {
         key={bug.id}
         initial={{ title: bug.title, description: bug.description || '', severity: bug.severity, status: bug.status }}
         existingImage={bug.hasImage ? { imageUrl: bug.imageUrl } : null}
+        onImageExpired={refresh}
         submitLabel="Save changes"
         submitHint="Replacing the screenshot deletes the previous one."
         onSubmit={onSubmit}
