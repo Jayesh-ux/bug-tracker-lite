@@ -4,7 +4,7 @@ import { Loader2 } from 'lucide-react'
 import { ImageDropzone } from './ImageDropzone.jsx'
 import { ErrorBanner } from './ErrorBanner.jsx'
 import { cx } from '../lib/format.js'
-import { SEVERITIES, STATUSES } from '../lib/bugMeta.js'
+import { SEVERITIES, SEVERITY_META, STATUSES } from '../lib/bugMeta.js'
 import { uploadImage, validateImage } from '../api/upload.js'
 
 const EMPTY = {
@@ -192,7 +192,7 @@ export function BugForm({ initial = EMPTY, existingImage = null, submitLabel, su
                         : 'border-slate-300 bg-white text-slate-600 hover:border-slate-400 hover:text-slate-900 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400 dark:hover:border-slate-500'
                     )}
                   >
-                    {s}
+                    {SEVERITY_META[s].label}
                   </button>
                 ))}
               </div>

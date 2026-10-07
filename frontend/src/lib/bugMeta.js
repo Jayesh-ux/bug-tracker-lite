@@ -1,4 +1,4 @@
-export const SEVERITIES = ['low', 'medium', 'high']
+export const SEVERITIES = ['low', 'med', 'high']
 export const STATUSES = ['open', 'in-progress', 'closed']
 
 export const SEVERITY_META = {
@@ -7,7 +7,7 @@ export const SEVERITY_META = {
     dot: 'bg-emerald-500',
     badge: 'border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-900/70 dark:bg-emerald-950/50 dark:text-emerald-400',
   },
-  medium: {
+  med: {
     label: 'Medium',
     dot: 'bg-amber-500',
     badge: 'border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-900/70 dark:bg-amber-950/50 dark:text-amber-400',
