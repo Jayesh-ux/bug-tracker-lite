@@ -1,0 +1,110 @@
+=== PHASE 4 REAL-S3 VERIFICATION ===
+run at 2026-10-07T12:09:01.0378357+05:30  bucket=bugtrackerelovient region=ap-southeast-2
+signup casey:     409  (expect 201)
+signup duplicate: 409  (expect 409)
+signup bad input: 400  (expect 400)
+alice token ok: True  aliceId=45a435b6-2934-49b4-8247-cef59bbcc976
+wrong password:    401  (expect 401)
+no token:          401          (expect 401)
+garbage token:     401      (expect 401)
+signup bob:        409  (expect 201)
+bob token ok: True
+
+=== 4) OWNERSHIP (alice bug e503060c-bd6f-4f09-8942-9f426f174068) ===
+Bob GET:    404    (expect 404)
+Bob PUT:    404  (expect 404)
+Bob DELETE: 404 (expect 404)
+Bob list contains alice bug? False (expect False; bob has 0 bugs)
+non-UUID id: 404  (expect 404)
+
+=== 5) VALIDATION ===
+severity urgent -> 400  (expect 400)
+status done    -> 400  (expect 400)
+status filter  -> 400  (expect 400)
+foreign key    -> 400  (expect 400)
+
+=== 6) UPLOAD-URL VALIDATION ===
+gif            -> 400  (expect 400)
+6MB            -> 400  (expect 400)
+non-int size   -> 400  (expect 400)
+
+=== 7) REAL S3 UPLOAD / READ / DELETE ===
+small.png=70 bytes  big.file=6291556 bytes
+upload-url -> url=https://bugtrackerelovient.s3.ap-southeast-2.amazonaws.com/
+upload-url -> key=uploads/45a435b6-2934-49b4-8247-cef59bbcc976/fae819ba-fb47-4052-9f1c-5637a1ffb8f4.png
+fields:
+  Content-Type = image/png
+  bucket = bugtrackerelovient
+  X-Amz-Algorithm = AWS4-HMAC-SHA256
+  X-Amz-Credential = AKIA5XUSP4I4PMJ3JO7W/20261007/ap-southeast-2/s3/aws4_request
+  X-Amz-Date = 20261007T063908Z
+  key = uploads/45a435b6-2934-49b4-8247-cef59bbcc976/fae819ba-fb47-4052-9f1c-5637a1ffb8f4.png
+  Policy = eyJleHBpcmF0aW9uIjoiMjAyNi0xMC0wN1QwNjo0NDowOFoiLCJjb25kaXRpb25zIjpbWyJjb250ZW50LWxlbmd0aC1yYW5nZSIsMSw1MjQyODgwXSxbImVxIiwiJENvbnRlbnQtVHlwZSIsImltYWdlL3BuZyJdLHsiQ29udGVudC1UeXBlIjoiaW1hZ2UvcG5nIn0seyJidWNrZXQiOiJidWd0cmFja2VyZWxvdmllbnQifSx7IlgtQW16LUFsZ29yaXRobSI6IkFXUzQtSE1BQy1TSEEyNTYifSx7IlgtQW16LUNyZWRlbnRpYWwiOiJBS0lBNVhVU1A0STRQTUozSk83Vy8yMDI2MTAwNy9hcC1zb3V0aGVhc3QtMi9zMy9hd3M0X3JlcXVlc3QifSx7IlgtQW16LURhdGUiOiIyMDI2MTAwN1QwNjM5MDhaIn0seyJrZXkiOiJ1cGxvYWRzLzQ1YTQzNWI2LTI5MzQtNDliNC04MjQ3LWNlZjU5YmJjYzk3Ni9mYWU4MTliYS1mYjQ3LTQwNTItOWYxYy01NjM3YTFmZmI4ZjQucG5nIn1dfQ==
+  X-Amz-Signature = 3934ea1018379ba9052094983864f6d465485055903120c9b89a686e32272c87
+7a S3 accepts small upload: 204   (expect 2xx)
+7b S3 rejects 6MB upload:  400     (expect 4xx)
+7c bug2 id=22a738e4-fe44-4466-b4b4-4a239d5a5ad0  hasImage=True  imageUrl=https://bugtrackerelovient.s3.ap-southeast-2.amazonaws.com/uploads/45a435b6-2934-49b4-8247-cef59bbcc976/fae819ba-fb47-4052-9f1c-5637a1ffb8f4.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA5XUSP4I4PMJ3JO7W%2F20261007%2Fap-southeast-2%2Fs3%2Faws4_request&X-Amz-Date=20261007T063958Z&X-Amz-Expires=300&X-Amz-Signature=114f57a47cc5dde1ba625f156f1d25357045d44b9152a8e2409cdc427e928375&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject
+7c signed GET status=200  pixels match=True   (expect 200 true)
+7d unsigned URL -> 403      (expect 403)
+7e PUT imageKey=null: hasImage=False
+7f DELETE bug2: 200
+
+=== BUCKET CONFIG PROBES ===
+
+=== DONE ===
+=== PHASE 4 REAL-S3 VERIFICATION ===
+run at 2026-10-07T12:52:23.6115364+05:30  bucket=bugtrackerelovient region=ap-southeast-2
+signup casey:     201  (expect 201)
+signup duplicate: 409  (expect 409)
+signup bad input: 400  (expect 400)
+alice token ok: True  aliceId=4c355189-3e54-4062-8cef-02f160320ab6
+wrong password:    401  (expect 401)
+no token:          401          (expect 401)
+garbage token:     401      (expect 401)
+signup bob:        201  (expect 201)
+bob token ok: True
+
+=== 4) OWNERSHIP (alice bug a8a6804f-91de-4fee-a87d-7acf299b22ae) ===
+Bob GET:    404    (expect 404)
+Bob PUT:    404  (expect 404)
+Bob DELETE: 404 (expect 404)
+Bob list contains alice bug? False (expect False; bob has 0 bugs)
+non-UUID id: 404  (expect 404)
+
+=== 5) VALIDATION ===
+severity urgent -> 400  (expect 400)
+status done    -> 400  (expect 400)
+status filter  -> 400  (expect 400)
+foreign key    -> 400  (expect 400)
+
+=== 6) UPLOAD-URL VALIDATION ===
+gif            -> 400  (expect 400)
+6MB            -> 400  (expect 400)
+non-int size   -> 400  (expect 400)
+
+=== 7) REAL S3 UPLOAD / READ / DELETE ===
+small.png=70 bytes  big.file=6291556 bytes
+upload-url -> url=https://bugtrackerelovient.s3.ap-southeast-2.amazonaws.com/
+upload-url -> key=uploads/4c355189-3e54-4062-8cef-02f160320ab6/f513c340-1b84-4cf7-9128-63b57cb78351.png
+fields:
+  Content-Type = image/png
+  bucket = bugtrackerelovient
+  X-Amz-Algorithm = AWS4-HMAC-SHA256
+  X-Amz-Credential = AKIA5XUSP4I4PMJ3JO7W/20261007/ap-southeast-2/s3/aws4_request
+  X-Amz-Date = 20261007T072225Z
+  key = uploads/4c355189-3e54-4062-8cef-02f160320ab6/f513c340-1b84-4cf7-9128-63b57cb78351.png
+  Policy = eyJleHBpcmF0aW9uIjoiMjAyNi0xMC0wN1QwNzoyNzoyNVoiLCJjb25kaXRpb25zIjpbWyJjb250ZW50LWxlbmd0aC1yYW5nZSIsMSw1MjQyODgwXSxbImVxIiwiJENvbnRlbnQtVHlwZSIsImltYWdlL3BuZyJdLHsiQ29udGVudC1UeXBlIjoiaW1hZ2UvcG5nIn0seyJidWNrZXQiOiJidWd0cmFja2VyZWxvdmllbnQifSx7IlgtQW16LUFsZ29yaXRobSI6IkFXUzQtSE1BQy1TSEEyNTYifSx7IlgtQW16LUNyZWRlbnRpYWwiOiJBS0lBNVhVU1A0STRQTUozSk83Vy8yMDI2MTAwNy9hcC1zb3V0aGVhc3QtMi9zMy9hd3M0X3JlcXVlc3QifSx7IlgtQW16LURhdGUiOiIyMDI2MTAwN1QwNzIyMjVaIn0seyJrZXkiOiJ1cGxvYWRzLzRjMzU1MTg5LTNlNTQtNDA2Mi04Y2VmLTAyZjE2MDMyMGFiNi9mNTEzYzM0MC0xYjg0LTRjZjctOTEyOC02M2I1N2NiNzgzNTEucG5nIn1dfQ==
+  X-Amz-Signature = 03a5182122b46eb492cdd7a9e317ee3bad69152d0421a15db27063a5840a32fe
+7a S3 accepts small upload: 204   (expect 2xx)
+7b S3 rejects 6MB upload:  400     (expect 4xx)
+7c bug2 id=db496ae8-9840-4474-8f48-b68d6318ab2c  hasImage=True  imageUrl=https://bugtrackerelovient.s3.ap-southeast-2.amazonaws.com/uploads/4c355189-3e54-4062-8cef-02f160320ab6/f513c340-1b84-4cf7-9128-63b57cb78351.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA5XUSP4I4PMJ3JO7W%2F20261007%2Fap-southeast-2%2Fs3%2Faws4_request&X-Amz-Date=20261007T072240Z&X-Amz-Expires=300&X-Amz-Signature=13e301eab0227933d32388b543d4fb2f1039d9a5f716fb45ce9273422c2c2d1a&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject
+7c signed GET status=200  pixels match=True   (expect 200 true)
+7d unsigned URL -> 403      (expect 403)
+7e PUT imageKey=null: hasImage=False
+7f DELETE bug2: 200
+
+=== BUCKET CONFIG PROBES ===
+
+=== DONE ===
+8  deletion proof: signed GET on 7e-removed object -> 403 (gone)
+9  deletion proof: signed GET on 7f-deleted object -> 403 (gone)
