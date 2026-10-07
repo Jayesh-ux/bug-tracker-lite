@@ -45,6 +45,9 @@ backend/server.log.*
 # e2e scratch (upload fixtures used by the smoke test)
 docs/screenshots/.tmp/
 
+# e2e scratch output (Playwright run logs)
+frontend/e2e/responsive.out.txt
+
 # Editors / OS
 .vscode/
 .idea/
