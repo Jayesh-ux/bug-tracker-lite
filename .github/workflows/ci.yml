@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  backend:
+    name: Backend (tests against PostgreSQL)
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: bugtracker
+          POSTGRES_PASSWORD: bugtracker
+          POSTGRES_DB: bugtracker_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U bugtracker"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+      - run: npm ci
+      # Tests use the service DB directly; setup applies ./src/schema.sql.
+      - run: npm test
+        env:
+          BUGTRACKER_TEST_URL: postgres://bugtracker:bugtracker@127.0.0.1:5432/bugtracker_test
+          JWT_SECRET: ci-test-secret
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: backend-artifacts
+          path: backend/
+          retention-days: 3
+
+  frontend:
+    name: Frontend (production build)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+      - run: npm run build

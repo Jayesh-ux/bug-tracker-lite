@@ -1,0 +1,42 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: bugtracker-postgres
+    environment:
+      POSTGRES_USER: bugtracker
+      POSTGRES_PASSWORD: bugtracker
+      POSTGRES_DB: bugtracker
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./backend/scripts/init-databases.sql:/docker-entrypoint-initdb.d/init-databases.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bugtracker -d bugtracker"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  api:
+    build:
+      context: ./backend
+    container_name: bugtracker-api
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      PORT: "4000"
+      DATABASE_URL: postgres://bugtracker:bugtracker@postgres:5432/bugtracker
+      JWT_SECRET: local-dev-only-change-me-please-0123456789
+      CORS_ORIGIN: http://localhost:5173
+      AWS_REGION: us-east-1
+      S3_BUCKET: bug-tracker-lite-images
+      NODE_ENV: development
+    ports:
+      - "4000:4000"
+    # AWS credentials are intentionally NOT in this file.
+    # Locally the API uses your `aws configure` profile via the default
+    # provider chain (~/.aws/credentials). On EC2 an IAM role is used.
+
+volumes:
+  pgdata:
