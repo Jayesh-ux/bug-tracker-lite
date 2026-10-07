@@ -36,7 +36,7 @@ export default function Login() {
     }
     setBusy(true)
     try {
-      const user = await login({ email: email.trim(), password })
+      const { user } = await login({ email: email.trim(), password })
       toast(`Welcome back, ${user.name.split(' ')[0]}.`)
       navigate(from, { replace: true })
     } catch (err) {
