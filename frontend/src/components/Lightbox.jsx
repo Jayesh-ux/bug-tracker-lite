@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { ZoomIn, X } from 'lucide-react'
 
-export function Lightbox({ src, alt = 'Screenshot', onClose }) {
+export function Lightbox({ src, alt = 'Screenshot', onClose, onExpire }) {
   useEffect(() => {
     const onKey = (e) => e.key === 'Escape' && onClose()
     window.addEventListener('keydown', onKey)
@@ -28,20 +28,21 @@ export function Lightbox({ src, alt = 'Screenshot', onClose }) {
           alt={alt}
           className="max-h-[85vh] max-w-[90vw] rounded-xl shadow-2xl"
           draggable={false}
+          onError={() => onExpire?.()}
         />
       </button>
     </div>
   )
 }
 
-export function Screenshot({ src, alt = 'Screenshot', onView }) {
+export function Screenshot({ src, alt = 'Screenshot', onView, onExpire }) {
   return (
     <button
       onClick={onView}
       className="group relative block w-full cursor-zoom-in overflow-hidden rounded-xl border border-slate-200 focus-visible:ring-2 focus-visible:ring-indigo-500/40 focus-visible:outline-none dark:border-slate-800"
       aria-label="View screenshot"
     >
-      <img src={src} alt={alt} className="h-72 w-full object-cover" loading="lazy" />
+      <img src={src} alt={alt} className="h-72 w-full object-cover" loading="lazy" onError={() => onExpire?.()} />
       <span className="absolute inset-0 flex items-center justify-center bg-slate-950/0 opacity-0 transition group-hover:bg-slate-950/35 group-hover:opacity-100 group-focus-visible:opacity-100">
         <span className="flex items-center gap-1.5 rounded-full bg-white/90 px-3 py-1.5 text-sm font-medium text-slate-800 shadow-sm">
           <ZoomIn className="h-4 w-4" aria-hidden="true" />

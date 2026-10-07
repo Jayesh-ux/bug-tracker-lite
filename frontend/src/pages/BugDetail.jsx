@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { ArrowLeft, CalendarClock, ImageOff, Pencil, Trash2 } from 'lucide-react'
 import { useBug } from '../hooks/useBug.js'
@@ -15,7 +15,17 @@ import { formatDate } from '../lib/format.js'
 
 export default function BugDetail() {
   const { id } = useParams()
-  const { bug, loading, error, reload } = useBug(id)
+  const { bug, loading, error, reload, refresh } = useBug(id)
+  const lastImageRefreshRef = useRef(0)
+
+  // Pre-signed imageUrl expires ~5 minutes after page load; when the img 403s,
+  // silently refetch the bug for a fresh URL (keeps the page mounted).
+  const handleImageExpired = () => {
+    const now = Date.now()
+    if (now - lastImageRefreshRef.current < 5000) return
+    lastImageRefreshRef.current = now
+    refresh()
+  }
   const { user } = useAuth()
   const { toast } = useToast()
   const navigate = useNavigate()
@@ -111,7 +121,7 @@ export default function BugDetail() {
           <div className="card p-5 sm:p-6">
             <h2 className="label">Screenshot</h2>
             {bug.hasImage && bug.imageUrl ? (
-              <Screenshot src={bug.imageUrl} alt="Screenshot attached to this bug" onView={() => setLightboxOpen(true)} />
+              <Screenshot src={bug.imageUrl} alt="Screenshot attached to this bug" onView={() => setLightboxOpen(true)} onExpire={handleImageExpired} />
             ) : (
               <div className="flex items-center gap-2.5 rounded-xl border border-dashed border-slate-300 px-4 py-6 text-sm text-slate-500 dark:border-slate-700 dark:text-slate-500">
                 <ImageOff className="h-4.5 w-4.5 text-slate-400 dark:text-slate-600" aria-hidden="true" />
@@ -131,7 +141,7 @@ export default function BugDetail() {
           />
 
           {lightboxOpen && bug.imageUrl && (
-            <Lightbox src={bug.imageUrl} alt="Screenshot attached to this bug" onClose={() => setLightboxOpen(false)} />
+            <Lightbox src={bug.imageUrl} alt="Screenshot attached to this bug" onClose={() => setLightboxOpen(false)} onExpire={handleImageExpired} />
           )}
         </>
       )}
