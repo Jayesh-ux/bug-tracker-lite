@@ -1,0 +1,46 @@
+﻿
+=== RESPONSIVE RESULTS ===
+PASS  register @320px  (overX=0 maxRight=320 (scrollW=320))
+PASS  register + empty dashboard @320
+PASS  bug form (filled) @320px  (overX=0 maxRight=320 (scrollW=320))
+PASS  detail (with image) @320px  (overX=0 maxRight=320 (scrollW=320))
+PASS  create bug with S3 image @320
+PASS  lightbox @320
+PASS  dashboard (list) @320px  (overX=0 maxRight=320 (scrollW=320))
+PASS  dashboard @320px  (overX=0 maxRight=320 (scrollW=320))
+PASS  form @320px  (overX=0 maxRight=320 (scrollW=320))
+PASS  detail @320px  (overX=0 maxRight=320 (scrollW=320))
+PASS  dashboard @360px  (overX=0 maxRight=360 (scrollW=360))
+PASS  form @360px  (overX=0 maxRight=360 (scrollW=360))
+PASS  detail @360px  (overX=0 maxRight=360 (scrollW=360))
+PASS  dashboard @375px  (overX=0 maxRight=375 (scrollW=375))
+PASS  form @375px  (overX=0 maxRight=375 (scrollW=375))
+PASS  detail @375px  (overX=0 maxRight=375 (scrollW=375))
+PASS  dashboard @390px  (overX=0 maxRight=390 (scrollW=390))
+PASS  form @390px  (overX=0 maxRight=390 (scrollW=390))
+PASS  detail @390px  (overX=0 maxRight=390 (scrollW=390))
+PASS  dashboard @414px  (overX=0 maxRight=414 (scrollW=414))
+PASS  form @414px  (overX=0 maxRight=414 (scrollW=414))
+PASS  detail @414px  (overX=0 maxRight=414 (scrollW=414))
+PASS  dashboard @430px  (overX=0 maxRight=430 (scrollW=430))
+PASS  form @430px  (overX=0 maxRight=430 (scrollW=430))
+PASS  detail @430px  (overX=0 maxRight=430 (scrollW=430))
+PASS  dashboard @768px  (overX=0 maxRight=768 (scrollW=768))
+PASS  form @768px  (overX=0 maxRight=768 (scrollW=768))
+PASS  detail @768px  (overX=0 maxRight=768 (scrollW=768))
+PASS  dashboard @1024px  (overX=0 maxRight=1024 (scrollW=1024))
+PASS  form @1024px  (overX=0 maxRight=1024 (scrollW=1024))
+PASS  detail @1024px  (overX=0 maxRight=1024 (scrollW=1024))
+PASS  dashboard @1280px  (overX=0 maxRight=1280 (scrollW=1280))
+PASS  form @1280px  (overX=0 maxRight=1280 (scrollW=1280))
+PASS  detail @1280px  (overX=0 maxRight=1280 (scrollW=1280))
+PASS  dashboard @1440px  (overX=0 maxRight=1440 (scrollW=1440))
+PASS  form @1440px  (overX=0 maxRight=1440 (scrollW=1440))
+PASS  detail @1440px  (overX=0 maxRight=1440 (scrollW=1440))
+PASS  edit status @320
+PASS  delete bug @320
+PASS  login @320px  (overX=0 maxRight=320 (scrollW=320))
+PASS  logout -> login @320
+PASS  no console/page errors
+
+Screenshots -> C:\Users\hsing\bug-tracker-lite\docs\screenshots\responsive

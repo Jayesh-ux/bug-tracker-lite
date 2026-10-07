@@ -5,7 +5,7 @@ export function Segmented({ options, value, onChange, ariaLabel }) {
     <div
       role="group"
       aria-label={ariaLabel}
-      className="inline-flex items-center gap-0.5 rounded-lg border border-slate-200 bg-white p-0.5 dark:border-slate-700 dark:bg-slate-900"
+      className="flex flex-wrap items-center gap-0.5 rounded-lg border border-slate-200 bg-white p-0.5 dark:border-slate-700 dark:bg-slate-900"
     >
       {options.map(({ value: v, label, count }) => (
         <button
