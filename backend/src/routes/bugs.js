@@ -296,7 +296,7 @@ router.put(
 
     // If the image changed, delete the old object. Never fail the request on
     // a delete failure — just log a warning (the DB no longer references it).
-    if (oldImageKey && oldImageKey !== body.imageKey) {
+    if (oldImageKey && body.imageKey !== undefined && oldImageKey !== body.imageKey) {
       try {
         await deleteObject({
           region: req.app.locals.config.awsRegion,

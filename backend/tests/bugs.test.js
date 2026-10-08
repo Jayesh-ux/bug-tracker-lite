@@ -243,6 +243,36 @@ describe('PUT /api/bugs/:id', () => {
     )
   })
 
+  it('editing without touching the image does NOT delete the S3 object', async () => {
+    const created = await createBug(tokenA, {
+      imageKey: `uploads/${userA.id}/kept.png`,
+    })
+    const id = created.body.id
+    const res = await request(app)
+      .put(`/api/bugs/${id}`)
+      .set('Authorization', `Bearer ${tokenA}`)
+      .send({ status: 'closed' })
+
+    expect(res.status).toBe(200)
+    expect(res.body.status).toBe('closed')
+    expect(res.body.imageKey).toBe(`uploads/${userA.id}/kept.png`)
+    expect(deleteObject).not.toHaveBeenCalled()
+  })
+
+  it('saving the same image key again is a no-op and does not delete', async () => {
+    const created = await createBug(tokenA, {
+      imageKey: `uploads/${userA.id}/kept.png`,
+    })
+    const id = created.body.id
+    const res = await request(app)
+      .put(`/api/bugs/${id}`)
+      .set('Authorization', `Bearer ${tokenA}`)
+      .send({ imageKey: `uploads/${userA.id}/kept.png` })
+
+    expect(res.status).toBe(200)
+    expect(deleteObject).not.toHaveBeenCalled()
+  })
+
   it('replacing the image deletes the OLD object', async () => {
     const created = await createBug(tokenA, {
       imageKey: `uploads/${userA.id}/old.png`,
